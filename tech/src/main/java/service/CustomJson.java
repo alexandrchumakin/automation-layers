@@ -3,6 +3,7 @@ package service;
 import com.google.gson.Gson;
 
 import lombok.Data;
+import service.model.HttpPostObject;
 import service.model.PostForm;
 import service.model.PostResponse;
 
@@ -12,6 +13,7 @@ public class CustomJson {
 
     public CustomJson(String stringObject) {
         Gson g = new Gson();
+        stringObject = stringObject.replace("\"[", "[").replace("]\"", "]");
         PostResponse parsedObject = g.fromJson(stringObject, PostResponse.class);
         try {
             postForm = parsedObject.getForm();
@@ -20,5 +22,9 @@ public class CustomJson {
             postForm = null;
             System.out.println(String.format("Failed to unmarshal `%s`: %s", stringObject, StringExtension.formatMessage(ex)));
         }
+    }
+
+    public HttpPostObject getHttpObject() {
+        return postForm.toHttpObject();
     }
 }

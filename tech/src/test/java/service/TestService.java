@@ -32,7 +32,7 @@ public class TestService {
     }
 
     @Test
-    public void emptyObject()  {
+    public void emptyObject() {
         PostForm actualObject = new CustomJson("").getPostForm();
         assertNull(actualObject);
     }

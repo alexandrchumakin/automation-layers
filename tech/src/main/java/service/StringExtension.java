@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class StringExtension {
-    public static String generateString(int len) {
+    private static String generateString(int len) {
         String alphChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
@@ -46,16 +46,6 @@ public class StringExtension {
         ArrayList<String> ss = (ArrayList<String>) enumList.stream().map(Object::toString).collect(Collectors.toList());
         return ss.toArray(new String[0]);
     }
-
-//    public static String generateUrl(String url){
-//        return String.format("%1$s%2$s", Configurations.getValueByKey("hostApi"), url);
-//    }
-//
-//    public static String baseEncode(){
-//        return String.format("Basic %1$s", new String(Base64.encodeBase64(
-//                String.format("%1$s:%2$s", Configurations.getValueByKey("user"), Configurations.getValueByKey("password")).getBytes()
-//        )));
-//    }
 
     public static String formatMessage(Exception ex) {
         String message = ex.getMessage();

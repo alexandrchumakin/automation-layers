@@ -4,8 +4,6 @@ import driver.DriverManager;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import pages.PostFormPage;
-import pages.ResponsePage;
 import service.CustomJson;
 import service.StringExtension;
 import service.model.PizzaSize;
@@ -38,7 +36,6 @@ public class TestPostForm {
         PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
         PostForm expectedResponse = PostForm.builder().build();
         assertEquals(expectedResponse, actualResponse);
-
     }
 
     @Test
@@ -78,6 +75,133 @@ public class TestPostForm {
                 .build();
         assertEquals(expectedResponse, actualResponse);
     }
+
+    @Test
+    public void randomName() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String customerName = StringExtension.generateString();
+
+        // populate form
+        postForm.getCustomerName().sendKeys(customerName);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().custname(customerName).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void randomEmail() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String email = StringExtension.generateEmail();
+
+        // populate form
+        postForm.getCustomerEmail().sendKeys(email);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().custemail(email).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void randomPhone() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String telephone = StringExtension.generatePhone();
+
+        // populate form
+        postForm.getCustomerTel().sendKeys(telephone);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().custtel(telephone).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void randomPizzaSize() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String size = StringExtension.randomEnum(PizzaSize.class).toString();
+
+        // populate form
+        postForm.setPizzaSize(size);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().size(size).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void multiplePizzaToppings() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String[] toppings = StringExtension.enumToArray(PizzaTopping.class);
+
+        // populate form
+        postForm.setPizzaToppings(toppings);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().topping(toppings).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void randomDeliveryInstructions() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String comments = String.format("%s\r\n%s", StringExtension.generateString(), StringExtension.generateString());
+
+        // populate form
+        postForm.getDeliveryInstructions().sendKeys(comments);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().comments(comments).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void randomDeliveryTime() {
+        // prepare data
+        PostFormPage postForm = new PostFormPage();
+        String deliveryTime = String.format("%s:00", StringExtension.generateNumber(11, 21));
+
+        // populate form
+        postForm.getDeliveryTime().sendKeys(deliveryTime);
+        postForm.clickSubmitOrder();
+
+        // verify
+        ResponsePage responsePage = new ResponsePage();
+        responsePage.getViewRawData().click();
+        PostForm actualResponse = new CustomJson(responsePage.getResponseJson().getText()).getPostForm();
+        PostForm expectedResponse = PostForm.builder().delivery(deliveryTime).build();
+        assertEquals(expectedResponse, actualResponse);
+    }
+
 
     @Test
     public void invalidEmailAddress() {
